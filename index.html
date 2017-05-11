@@ -56,6 +56,7 @@
                 var prismicUrl = 'https://liam-tarpey-portfolio.prismic.io/api';
                 var api = null;
 
+                // Get Prismic posts
                 var getPosts = function() {
 
                     var onSuccess = function(response) {
@@ -74,8 +75,7 @@
                     api.query(predicate, options).then(onSuccess, onError);
                 };
 
-
-                // Get Prismic posts
+                // Retrieve API
                 Prismic.Api(prismicUrl, function(err, response) {
                     api = response;
                     getPosts();
