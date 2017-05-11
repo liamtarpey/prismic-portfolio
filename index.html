@@ -53,18 +53,34 @@
                     template: '<li>{{ article.text }}</li>'
                 });
 
-                var onSuccess = function(response) {
-                    console.log(response);
+                var prismicUrl = 'https://liam-tarpey-portfolio.prismic.io/api';
+                var api = null;
+
+                var getPosts = function() {
+
+                    var onSuccess = function(response) {
+                        console.log(response);
+                    };
+
+                    var onError = function(error) {
+                        console.log(error);
+                    };
+
+                    var predicate = Prismic.Predicates.at('document.type', 'blog-post');
+                    var options = {
+                        orderings: '[my.blog-post.date desc]'
+                    }
+
+                    api.query(predicate, options).then(onSuccess, onError);
                 };
 
-                var onError = function(error) {
-                    console.log(error);
-                };
-
-                var url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=dd2ec1a1decb4d9c8fb58b2ed2c1be1a';
 
                 // Get Prismic posts
-                Vue.http.get(url).then(onSuccess, onError);
+                Prismic.Api(prismicUrl, function(err, response) {
+                    api = response;
+                    getPosts();
+                });
+
             }());
         </script>
     </body>
