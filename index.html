@@ -1,0 +1,71 @@
+<!doctype html>
+<html class="no-js" lang="en-GB">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+
+        <p id="vue-intro-text" v-text="copy" v-cloak></p>
+
+        <div id="app">
+            <ul>
+                <article-list v-for="item in articleList">
+                    {{ item.id }}. {{ item.text }}
+                </article-list>
+            </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.3.1/vue-resource.min.js"></script>
+        <script src="https://unpkg.com/prismic.io/dist/prismic.io.min.js"></script>
+        <script type="text/javascript">
+            (function() {
+                'use strict';
+
+                // Declare app
+                var app = new Vue({
+                    el: '#app',
+                    data: {
+                        message: 'Hello Vue!',
+                        articleList: [
+                            { id: 0, text: 'Great news!' },
+                            { id: 1, text: 'Some other good news!' },
+                            { id: 2, text: 'More fantastic news!' }
+                        ]
+                    }
+                });
+
+                // Intro text
+                var introText = new Vue({
+                    el: '#vue-intro-text',
+                    data: {
+                        copy: 'Here\'s some intro text to introduce the website'
+                    }
+                });
+
+                Vue.component('article-list', {
+                    props: ['article'],
+                    template: '<li>{{ article.text }}</li>'
+                });
+
+                var onSuccess = function(response) {
+                    console.log(response);
+                };
+
+                var onError = function(error) {
+                    console.log(error);
+                };
+
+                var url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=dd2ec1a1decb4d9c8fb58b2ed2c1be1a';
+
+                // Get Prismic posts
+                Vue.http.get(url).then(onSuccess, onError);
+            }());
+        </script>
+    </body>
+</html>
